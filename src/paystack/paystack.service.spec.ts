@@ -38,7 +38,6 @@ describe('PaystackService', () => {
   describe('initializeTransaction', () => {
     it('should initialize a transaction successfully', async () => {
       const initDto: InitializeTransactionDto = {
-        email: 'test@example.com',
         amount: 1000,
         callback_url: 'https://example.com/callback'
       };
@@ -68,7 +67,6 @@ describe('PaystackService', () => {
       expect(httpService.post).toHaveBeenCalledWith(
         'https://api.paystack.co/transaction/initialize',
         expect.objectContaining({
-          email: initDto.email,
           amount: expect.any(Number),
           callback_url: initDto.callback_url,
         }),

@@ -56,7 +56,10 @@ export class PaystackService {
   ): Promise<PaystackBaseResponse<InitializeTransactionResponse>> {
     try {
       // Verify that user exists
-      await this.userService.findOne(initializeTransactionDto.userId);
+      let user = await this.userService.findOne(initializeTransactionDto.userId);
+      if (!user) {
+        throw new NotFoundException(`User with ID ${initializeTransactionDto.userId} not found`);
+      }
       
       // Check payment reason and reason ID
       await this.validatePaymentReason(
@@ -77,6 +80,7 @@ export class PaystackService {
           `${this.baseUrl}/transaction/initialize`,
           { 
             ...initializeTransactionDto, 
+            email: user.email,
             amount,
             reference 
           },
@@ -89,7 +93,7 @@ export class PaystackService {
         await this.savePayment({
           reference: data.data.reference,
           amount: initializeTransactionDto.amount,
-          email: initializeTransactionDto.email,
+          email: user.email,
           paymentReason: initializeTransactionDto.paymentReason,
           reasonId: initializeTransactionDto.reasonId,
           userId: initializeTransactionDto.userId,

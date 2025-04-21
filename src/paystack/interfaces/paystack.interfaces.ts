@@ -2,7 +2,6 @@ import { PaymentReason } from '../entities/payment.entity';
 
 // Request interfaces
 export interface InitializeTransactionDto {
-  email: string;
   amount: number;
   reference?: string;
   callback_url?: string;

@@ -1,12 +1,8 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentReason } from '../entities/payment.entity';
 
 export class InitializeTransactionDto {
-  @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
-
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
