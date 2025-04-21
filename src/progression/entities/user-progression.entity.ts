@@ -24,7 +24,7 @@ export class UserProgression {
   @Prop({ default: 0 })
   losses: number;
 
-  @Prop({ enum: MilitaryRank, default: MilitaryRank.SECOND_LIEUTENANT })
+  @Prop({ type: Number, enum: Object.values(MilitaryRank).filter(v => typeof v === 'number'), default: MilitaryRank.SECOND_LIEUTENANT })
   rank: MilitaryRank;
 
   @Prop({ default: 0 })
