@@ -274,4 +274,57 @@ export class TournamentService {
       active: true,
     }).exec();
   }
+
+  /**
+   * Get the top player from the active tournament's leaderboard
+   * @returns The top player with score and tournament details, or null if no active tournament
+   */
+  async getActiveLeaderboardTopPlayer(): Promise<{
+    hasActive: boolean;
+    tournament?: Tournament;
+    topPlayer?: {
+      userId: string;
+      username: string;
+      firstName: string;
+      lastName: string;
+      score: number;
+    };
+  }> {
+    // Find the active tournament
+    const activeTournaments = await this.tournamentModel.find({ active: true }).exec();
+    
+    if (activeTournaments.length === 0) {
+      return { hasActive: false };
+    }
+    
+    const tournament = activeTournaments[0];
+    const tournamentId = tournament.id; // Using id instead of _id
+    
+    // Get the top player from the leaderboard
+    const topPlayer = await this.leaderboardModel
+      .findOne({ tournamentId })
+      .sort({ score: -1 })
+      .limit(1)
+      .exec();
+    
+    if (!topPlayer) {
+      return { 
+        hasActive: true, 
+        tournament,
+        topPlayer: null 
+      };
+    }
+    
+    return {
+      hasActive: true,
+      tournament,
+      topPlayer: {
+        userId: topPlayer.userId,
+        username: topPlayer.username,
+        firstName: topPlayer.firstName,
+        lastName: topPlayer.lastName,
+        score: topPlayer.score
+      }
+    };
+  }
 } 

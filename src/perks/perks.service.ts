@@ -96,17 +96,17 @@ export class PerksService {
   }
 
   // Use a perk
-  async usePerk(id: string): Promise<UserPerk> {
+  async usePerk(id: string, amount = 1): Promise<UserPerk> {
     const userPerk = await this.userPerkModel.findById(id).exec();
     if (!userPerk) {
       throw new NotFoundException(`User perk with ID ${id} not found`);
     }
 
-    if (userPerk.count <= 0) {
-      throw new BadRequestException('No perks remaining to use');
+    if (userPerk.count < amount) {
+      throw new BadRequestException(`Not enough perks remaining. You have ${userPerk.count} but trying to use ${amount}`);
     }
 
-    userPerk.count -= 1;
+    userPerk.count -= amount;
     userPerk.used = true;
     userPerk.usedAt = new Date();
 

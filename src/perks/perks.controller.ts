@@ -21,7 +21,7 @@ export class PerksController {
   }
 
   // Create a user perk (requires authentication)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('user')
   createUserPerk(@Body() createUserPerkDto: CreateUserPerkDto) {
     return this.perksService.createUserPerk(createUserPerkDto);
@@ -59,7 +59,10 @@ export class PerksController {
   // Use a perk (requires authentication)
 //   @UseGuards(JwtAuthGuard)
   @Post('user/perk/:id/use')
-  usePerk(@Param('id') id: string) {
-    return this.perksService.usePerk(id);
+  usePerk(
+    @Param('id') id: string,
+    @Body() body: { amount?: number }
+  ) {
+    return this.perksService.usePerk(id, body?.amount);
   }
 } 

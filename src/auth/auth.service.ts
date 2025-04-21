@@ -9,12 +9,14 @@ import { LoginDto } from './dto/login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { ProgressionService } from '../progression/progression.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly progressionService: ProgressionService,
   ) {}
 
   async register(createUserDto: CreateUserDto) {
@@ -66,16 +68,22 @@ export class AuthService {
     return { message: 'Password has been reset successfully' };
   }
 
-  private generateToken(user: any) {
+  private async generateToken(user: any) {
     const payload = {
       sub: user._id,
       username: user.username,
       email: user.email,
     };
 
+    // Get user's rank
+    const rank = await this.progressionService.getUserRank(user._id.toString());
+
     return {
       accessToken: this.jwtService.sign(payload),
-      user,
+      user: {
+        ...user.toJSON(),
+        rank
+      },
     };
   }
 }

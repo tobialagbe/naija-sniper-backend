@@ -9,6 +9,8 @@ import { TournamentModule } from './tournament/tournament.module';
 import { BountyModule } from './bounty/bounty.module';
 import { PerksModule } from './perks/perks.module';
 import { PaystackModule } from './paystack/paystack.module';
+import { ProgressionModule } from './progression/progression.module';
+import { KillStreakModule } from './kill-streak/kill-streak.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { PaystackModule } from './paystack/paystack.module';
     BountyModule,
     PerksModule,
     PaystackModule,
+    ProgressionModule,
+    KillStreakModule,
   ],
   controllers: [AppController],
   providers: [AppService],

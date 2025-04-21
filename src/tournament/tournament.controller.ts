@@ -38,6 +38,11 @@ export class TournamentController {
     return this.tournamentService.findActiveTournaments();
   }
 
+  @Get('active/top-player')
+  findActiveTopPlayer() {
+    return this.tournamentService.getActiveLeaderboardTopPlayer();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tournamentService.findOne(id);
