@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserProgression, UserProgressionDocument } from './entities/user-progression.entity';
 import { AddMatchResultDto } from './dto/add-match-result.dto';
-import { MilitaryRank } from './enums/ranks.enum';
+import { MilitaryRank, MilitaryRankLabels } from './enums/ranks.enum';
 
 @Injectable()
 export class ProgressionService {
@@ -166,11 +166,12 @@ export class ProgressionService {
   /**
    * Get just a user's rank
    * @param userId The user's ID
-   * @returns The user's military rank or SECOND_LIEUTENANT if no progression exists
+   * @returns The user's military rank label or "Second Lieutenant" if no progression exists
    */
-  async getUserRank(userId: string): Promise<MilitaryRank> {
+  async getUserRank(userId: string): Promise<string> {
     const progression = await this.userProgressionModel.findOne({ userId }).exec();
-    return progression?.rank || MilitaryRank.SECOND_LIEUTENANT;
+    const rank = progression?.rank || MilitaryRank.SECOND_LIEUTENANT;
+    return MilitaryRankLabels[rank];
   }
   
   /**
